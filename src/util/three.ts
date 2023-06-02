@@ -2,6 +2,9 @@ import * as THREE from 'three' //导入three.js核心库
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls' //导入轨道控制器
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader' //导入GLTF模型加载器
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader' //导入GLTF模型加载器
+function addSky(scene:THREE.Scene) {
+    scene.background = new THREE.CubeTextureLoader().setPath('assets/sky/').load(['px.jpg', 'nx.jpg', 'py.jpg', 'ny.jpg', 'pz.jpg', 'nz.jpg']) 
+}
 class Motro3d {
   container: HTMLElement | null
   // @ts-ignore
@@ -19,7 +22,7 @@ class Motro3d {
 
   init() {
     this.initScene()
-    this.initAxis()
+    // this.initAxis()
     this.initCamera()
     this.initLight()
     this.initRender()
@@ -39,7 +42,6 @@ class Motro3d {
   }
   initScene() {
     this.scene = new THREE.Scene()
-    this.scene.background = new THREE.Color('white')
   }
   initAxis() {
     const axesHelper = new THREE.AxesHelper(1000)
@@ -48,6 +50,7 @@ class Motro3d {
   initCamera() {
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000)
     camera.position.set(100, 100, 100)
+    camera.lookAt(0, 0, 300)
     this.scene?.add(camera)
     this.camera = camera
   }
@@ -72,6 +75,7 @@ class Motro3d {
   }
   render() {
     this.renderer.render(this.scene, this.camera)
+    requestAnimationFrame(this.render.bind(this))
   }
   loadObj(url: string) {
     this.objLoader.load(url, (obj) => {
@@ -80,3 +84,4 @@ class Motro3d {
   }
 }
 export default Motro3d
+export {addSky}
