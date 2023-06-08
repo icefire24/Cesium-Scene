@@ -5,6 +5,6 @@ import App from "./App";
 import "@unocss/reset/tailwind.css";
 import "uno.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <App />
 );
