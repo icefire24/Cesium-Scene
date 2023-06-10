@@ -7,7 +7,7 @@ specifiers:
   '@unocss/reset': ^0.50.4
   '@vitejs/plugin-react': ^3.1.0
   antd: ^5.6.1
-  cesium: ^1.106.1
+  cesium: '1.103'
   react: ^18.2.0
   react-dom: ^18.2.0
   react-router-dom: ^6.9.0
@@ -22,7 +22,7 @@ dependencies:
   '@types/three': 0.152.1
   '@unocss/reset': 0.50.4
   antd: registry.npmmirror.com/antd/5.6.1_biqbaboplfbrettd7655fr4n2y
-  cesium: registry.npmmirror.com/cesium/1.106.1
+  cesium: registry.npmmirror.com/cesium/1.103.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-router-dom: 6.9.0_biqbaboplfbrettd7655fr4n2y
@@ -36,7 +36,7 @@ devDependencies:
   typescript: 4.9.5
   unplugin-auto-import: registry.npmmirror.com/unplugin-auto-import/0.16.4
   vite: 4.1.4
-  vite-plugin-cesium: registry.npmmirror.com/vite-plugin-cesium/1.2.22_cesium@1.106.1+vite@4.1.4
+  vite-plugin-cesium: registry.npmmirror.com/vite-plugin-cesium/1.2.22_cesium@1.103.0+vite@4.1.4
 
 packages:
 
@@ -1430,38 +1430,38 @@ packages:
       regenerator-runtime: registry.npmmirror.com/regenerator-runtime/0.13.11
     dev: false
 
-  registry.npmmirror.com/@cesium/engine/2.4.1:
-    resolution: {integrity: sha512-8f0hBzhPUSimYLZ+cmQ0rSudm+8zYD3sBMvJcPSVt0wDpLT7tvBt9swC2v5qC2gOwGOeyFnJhXKes3ICE6SaDA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@cesium/engine/-/engine-2.4.1.tgz}
+  registry.npmmirror.com/@cesium/engine/2.1.0:
+    resolution: {integrity: sha512-U80bWcu+SmJYH/5nzowHcJI093qTkOd8wYj54Hgj7PKk1QhFKfE+oLCb8F577wAvwptoEZ57CdR4KgJNLGO1SA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@cesium/engine/-/engine-2.1.0.tgz}
     name: '@cesium/engine'
-    version: 2.4.1
+    version: 2.1.0
     engines: {node: '>=14.0.0'}
     dependencies:
       '@tweenjs/tween.js': registry.npmmirror.com/@tweenjs/tween.js/18.6.4
       '@zip.js/zip.js': registry.npmmirror.com/@zip.js/zip.js/2.4.26
       autolinker: registry.npmmirror.com/autolinker/4.0.0
       bitmap-sdf: registry.npmmirror.com/bitmap-sdf/1.0.4
-      dompurify: registry.npmmirror.com/dompurify/3.0.3
+      dompurify: registry.npmmirror.com/dompurify/2.4.5
       earcut: registry.npmmirror.com/earcut/2.2.4
       grapheme-splitter: registry.npmmirror.com/grapheme-splitter/1.0.4
       jsep: registry.npmmirror.com/jsep/1.3.8
-      kdbush: registry.npmmirror.com/kdbush/4.0.2
-      ktx-parse: registry.npmmirror.com/ktx-parse/0.5.0
+      kdbush: registry.npmmirror.com/kdbush/3.0.0
+      ktx-parse: registry.npmmirror.com/ktx-parse/0.4.5
       lerc: registry.npmmirror.com/lerc/2.0.0
       mersenne-twister: registry.npmmirror.com/mersenne-twister/1.1.0
-      meshoptimizer: registry.npmmirror.com/meshoptimizer/0.19.0
+      meshoptimizer: registry.npmmirror.com/meshoptimizer/0.18.1
       pako: registry.npmmirror.com/pako/2.1.0
       protobufjs: registry.npmmirror.com/protobufjs/7.2.3
       rbush: registry.npmmirror.com/rbush/3.0.1
       topojson-client: registry.npmmirror.com/topojson-client/3.1.0
       urijs: registry.npmmirror.com/urijs/1.19.11
 
-  registry.npmmirror.com/@cesium/widgets/2.3.1:
-    resolution: {integrity: sha512-KC/GtcrS2t9Vf710C5a0ArG9ZawVeUhA37ISzFSCqVoAmlNd2YAjv00SZZOMtFqjMFWr7sOcm3BwMjWXnTWjvw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@cesium/widgets/-/widgets-2.3.1.tgz}
+  registry.npmmirror.com/@cesium/widgets/2.1.0:
+    resolution: {integrity: sha512-/sdDNr8nJMALjzHBdeeFdIxakP/9DbTccDouQWjOvpOj2aVe5iFNQWkYULssV38ywp2JEqmhvF5+eHsT0PAjPA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@cesium/widgets/-/widgets-2.1.0.tgz}
     name: '@cesium/widgets'
-    version: 2.3.1
+    version: 2.1.0
     engines: {node: '>=14.0.0'}
     dependencies:
-      '@cesium/engine': registry.npmmirror.com/@cesium/engine/2.4.1
+      '@cesium/engine': registry.npmmirror.com/@cesium/engine/2.1.0
       nosleep.js: registry.npmmirror.com/nosleep.js/0.12.0
 
   registry.npmmirror.com/@ctrl/tinycolor/3.6.0:
@@ -2090,14 +2090,14 @@ packages:
     dependencies:
       fill-range: registry.npmmirror.com/fill-range/7.0.1
 
-  registry.npmmirror.com/cesium/1.106.1:
-    resolution: {integrity: sha512-89sgLqWBhj57wtC8Jfn1yKfN3+Vk5IYxeW+5KqOZ280AL6Rr7E+MWTFiEfp5P3MY3xEcrutN3v8GYgP+Q3JfbA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/cesium/-/cesium-1.106.1.tgz}
+  registry.npmmirror.com/cesium/1.103.0:
+    resolution: {integrity: sha512-BoZx7Op/BYd8p8rBDnuv/u7b/yg2WpK3WBfrAKceemU1pv2QlMrFNBxKnd3PWHSUgJZc/yHtP7YrX5pIn7JSgA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/cesium/-/cesium-1.103.0.tgz}
     name: cesium
-    version: 1.106.1
+    version: 1.103.0
     engines: {node: '>=14.0.0'}
     dependencies:
-      '@cesium/engine': registry.npmmirror.com/@cesium/engine/2.4.1
-      '@cesium/widgets': registry.npmmirror.com/@cesium/widgets/2.3.1
+      '@cesium/engine': registry.npmmirror.com/@cesium/engine/2.1.0
+      '@cesium/widgets': registry.npmmirror.com/@cesium/widgets/2.1.0
 
   registry.npmmirror.com/chokidar/3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/chokidar/-/chokidar-3.5.3.tgz}
@@ -2186,10 +2186,10 @@ packages:
     version: 1.12.4
     dev: false
 
-  registry.npmmirror.com/dompurify/3.0.3:
-    resolution: {integrity: sha512-axQ9zieHLnAnHh0sfAamKYiqXMJAVwu+LM/alQ7WDagoWessyWvMSFyW65CqF3owufNu8HBcE4cM2Vflu7YWcQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dompurify/-/dompurify-3.0.3.tgz}
+  registry.npmmirror.com/dompurify/2.4.5:
+    resolution: {integrity: sha512-jggCCd+8Iqp4Tsz0nIvpcb22InKEBrGz5dw3EQJMs8HPJDsKbFIO3STYtAvCfDx26Muevn1MHVI0XxjgFfmiSA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dompurify/-/dompurify-2.4.5.tgz}
     name: dompurify
-    version: 3.0.3
+    version: 2.4.5
 
   registry.npmmirror.com/earcut/2.2.4:
     resolution: {integrity: sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/earcut/-/earcut-2.2.4.tgz}
@@ -2404,15 +2404,15 @@ packages:
       graceful-fs: registry.npmmirror.com/graceful-fs/4.2.11
     dev: true
 
-  registry.npmmirror.com/kdbush/4.0.2:
-    resolution: {integrity: sha512-WbCVYJ27Sz8zi9Q7Q0xHC+05iwkm3Znipc2XTlrnJbsHMYktW4hPhXUE8Ys1engBrvffoSCqbil1JQAa7clRpA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/kdbush/-/kdbush-4.0.2.tgz}
+  registry.npmmirror.com/kdbush/3.0.0:
+    resolution: {integrity: sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/kdbush/-/kdbush-3.0.0.tgz}
     name: kdbush
-    version: 4.0.2
+    version: 3.0.0
 
-  registry.npmmirror.com/ktx-parse/0.5.0:
-    resolution: {integrity: sha512-5IZrv5s1byUeDTIee1jjJQBiD5LPDB0w9pJJ0oT9BCKKJf16Tuj123vm1Ps0GOHSHmeWPgKM0zuViCVuTRpqaA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ktx-parse/-/ktx-parse-0.5.0.tgz}
+  registry.npmmirror.com/ktx-parse/0.4.5:
+    resolution: {integrity: sha512-MK3FOody4TXbFf8Yqv7EBbySw7aPvEcPX++Ipt6Sox+/YMFvR5xaTyhfNSk1AEmMy+RYIw81ctN4IMxCB8OAlg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ktx-parse/-/ktx-parse-0.4.5.tgz}
     name: ktx-parse
-    version: 0.5.0
+    version: 0.4.5
 
   registry.npmmirror.com/lerc/2.0.0:
     resolution: {integrity: sha512-7qo1Mq8ZNmaR4USHHm615nEW2lPeeWJ3bTyoqFbd35DLx0LUH7C6ptt5FDCTAlbIzs3+WKrk5SkJvw8AFDE2hg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lerc/-/lerc-2.0.0.tgz}
@@ -2458,10 +2458,10 @@ packages:
     name: mersenne-twister
     version: 1.1.0
 
-  registry.npmmirror.com/meshoptimizer/0.19.0:
-    resolution: {integrity: sha512-58qz5Qc/6Geu8Ib3bBWERE5R7pM5ErrJVo16fAtu6ryxVaE3VAtM/u2vurDxaq8AGZ3yWxuM/DnylTga5a4XCQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/meshoptimizer/-/meshoptimizer-0.19.0.tgz}
+  registry.npmmirror.com/meshoptimizer/0.18.1:
+    resolution: {integrity: sha512-ZhoIoL7TNV4s5B6+rx5mC//fw8/POGyNxS/DZyCJeiZ12ScLfVwRE/GfsxwiTkMYYD5DmK2/JXnEVXqL4rF+Sw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/meshoptimizer/-/meshoptimizer-0.18.1.tgz}
     name: meshoptimizer
-    version: 0.19.0
+    version: 0.18.1
 
   registry.npmmirror.com/micromatch/4.0.5:
     resolution: {integrity: sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/micromatch/-/micromatch-4.0.5.tgz}
@@ -3512,7 +3512,7 @@ packages:
     name: urijs
     version: 1.19.11
 
-  registry.npmmirror.com/vite-plugin-cesium/1.2.22_cesium@1.106.1+vite@4.1.4:
+  registry.npmmirror.com/vite-plugin-cesium/1.2.22_cesium@1.103.0+vite@4.1.4:
     resolution: {integrity: sha512-OnS+VKNGck4kUu4/67Fdfhz0/zF9mDVNUp9hUWtX19C38O0mJsJy2MH1ev2QcrVLf6VieJ7vCGxkLchdB1n1HQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vite-plugin-cesium/-/vite-plugin-cesium-1.2.22.tgz}
     id: registry.npmmirror.com/vite-plugin-cesium/1.2.22
     name: vite-plugin-cesium
@@ -3521,7 +3521,7 @@ packages:
       cesium: ^1.95.0
       vite: '>=2.7.1'
     dependencies:
-      cesium: registry.npmmirror.com/cesium/1.106.1
+      cesium: registry.npmmirror.com/cesium/1.103.0
       fs-extra: registry.npmmirror.com/fs-extra/9.1.0
       rollup-plugin-external-globals: registry.npmmirror.com/rollup-plugin-external-globals/0.6.1
       serve-static: registry.npmmirror.com/serve-static/1.15.0

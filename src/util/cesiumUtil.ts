@@ -1,14 +1,15 @@
 import * as Cesium from 'cesium'
-interface url {
+interface TilesetOption {
   url: string
+  [key: string]: any
 }
 /**
  * @description:加载3dtiles
  * @param {cesium.Viewer} viewer
  * @param {Object} option 参数
  * @return {Promise<cesium.Cesium3DTileset>}
-*/
-const load3DTiles = (viewer: Cesium.Viewer, option: Cesium.Cesium3DTileset.ConstructorOptions & url):Promise<Cesium.Cesium3DTileset> => {
+ */
+const load3DTiles = (viewer: Cesium.Viewer, option: TilesetOption): Promise<Cesium.Cesium3DTileset> => {
   return new Promise((resolve, reject) => {
     const tileset = new Cesium.Cesium3DTileset(option)
     viewer.scene.primitives.add(tileset)
@@ -20,11 +21,13 @@ const load3DTiles = (viewer: Cesium.Viewer, option: Cesium.Cesium3DTileset.Const
  * @param {cesium.Viewer} viewer
  * @param {Object} option 参数
  * @return {Promise<cesium.Model>}
-*/
-const loadGltf = (viewer: Cesium.Viewer, option:any):Promise<Cesium.Model> => {
+ */
+const loadGltf = (viewer: Cesium.Viewer, option: Record<string, any>): Promise<Cesium.Model> => {
   return new Promise((resolve, reject) => {
     const model = viewer.scene.primitives.add(Cesium.Model.fromGltf(option as any))
-    resolve(model)
+    model.readyPromise.then((model:Cesium.Model) => {
+      resolve(model)
+    })
   })
 }
 
@@ -45,8 +48,8 @@ function initCesium(viewer: null | Cesium.Viewer, container: string | HTMLDivEle
     timeline: false, //是否显示时间线控件
     geocoder: false, //是否显示地名查找控件
     fullscreenButton: false, //是否全屏按钮
-    shouldAnimate: false,
-    
+    shouldAnimate: false
+
     // terrainProvider: Cesium.createWorldTerrain()//加载cesium资源地形
   })
   //@ts-ignore
@@ -96,8 +99,8 @@ class RainEffect {
         },
         rainSpeed: () => {
           return this.rainSpeed
-        },
-      },
+        }
+      }
     })
     this.viewer.scene.postProcessStages.add(this.rainStage)
   }
@@ -187,8 +190,8 @@ class SnowEffect {
         },
         snowSpeed: () => {
           return this.snowSpeed
-        },
-      },
+        }
+      }
     })
     this.viewer.scene.postProcessStages.add(this.snowStage)
   }
@@ -243,4 +246,222 @@ class SnowEffect {
             '
   }
 }
-export { RainEffect, SnowEffect, initCesium,load3DTiles,loadGltf }
+
+class transformControl {
+  model: Cesium.Model | Cesium.Cesium3DTileset
+  handler: Cesium.ScreenSpaceEventHandler | null
+  _primitives: Cesium.PrimitiveCollection
+  viewer: Cesium.Viewer
+  center: Cesium.Cartesian3
+  radius: number
+  _width: number
+  _headWidth: number
+  _length: number
+  _headLength: number
+  _inverse: boolean
+
+  constructor(model: Cesium.Model | Cesium.Cesium3DTileset, viewer: Cesium.Viewer, center: Cesium.Cartesian3, radius: number, option?: any) {
+    this.model = model
+    this.viewer = viewer
+    this.center = center
+    this.radius = radius
+    this._primitives = new Cesium.PrimitiveCollection()
+    this._width = option?.width || 3
+    this._headWidth = option?.headWidth || 2 * this._width
+    this._length = option?.length || 300
+    this._headLength = option?.headLength || 10
+    this._inverse = option?.inverse || false
+    this.handler = null
+    this.init()
+  }
+  init() {
+    this.initAxis()
+    this.initPoly()
+    this.viewer.scene.primitives.add(this._primitives)
+    this.initEvent()
+  }
+  initEvent() {
+    let viewer = this.viewer
+    let start: Cesium.Cartesian3 | undefined = new Cesium.Cartesian3()
+    let end: Cesium.Cartesian3 | undefined = new Cesium.Cartesian3()
+    let leftDown = false
+    //点击屏幕拾取点
+    this.handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas)
+    this.handler.setInputAction((event: any) => {
+      //判断点击的轴
+      let pick = viewer.scene.pick(event.position)
+
+      if (pick && pick.id && pick.id === 'axisY-line') {
+        // 如果为真，则允许用户旋转相机。如果为假，相机将锁定到当前标题。此标志仅适用于2D和3D。
+        viewer.scene.screenSpaceCameraController.enableRotate = false
+        leftDown = true
+      }
+      //
+      let position = viewer.camera.pickEllipsoid(event.position, viewer.scene.globe.ellipsoid)
+      start = position
+    }, Cesium.ScreenSpaceEventType.LEFT_DOWN)
+    //鼠标移动过程中移动模型
+    this.handler.setInputAction((event: any) => {
+      if (leftDown) {
+        if (Cesium.defined(start)) {
+          end = viewer.camera.pickEllipsoid(event.endPosition, viewer.scene.globe.ellipsoid)
+          if (Cesium.defined(end)) {
+            let distance = new Cesium.Cartesian3()
+            Cesium.Cartesian3.subtract(end!, start!, distance)
+            let offset = new Cesium.Cartesian3(0, distance.y, 0)
+
+            let translation = Cesium.Matrix4.fromTranslation(offset)
+            
+            Cesium.Matrix4.multiply(this.model.modelMatrix, translation, this.model.modelMatrix)
+            this.translateSelf(translation)
+            start = end
+          }
+        }
+      }
+    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+    //鼠标左键抬起
+    this.handler.setInputAction((event: any) => {
+      leftDown = false
+      viewer.scene.screenSpaceCameraController.enableRotate = true
+      // start = undefined
+      // handler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+    }, Cesium.ScreenSpaceEventType.LEFT_UP)
+  }
+  initAxis() {
+    const axisZ = this.initArrowPolyline('axisZ', Cesium.Color.BLUE)
+    const axisX = this.initArrowPolyline('axisX', Cesium.Color.RED)
+    const axisY = this.initArrowPolyline('axisY', Cesium.Color.GREEN)
+    this._primitives.add(axisZ)
+    this._primitives.add(axisX)
+    this._primitives.add(axisY)
+    //旋转x轴和y轴到正确的位置
+    const mx = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(90))
+    const rotationX = Cesium.Matrix4.fromRotationTranslation(mx)
+    Cesium.Matrix4.multiply(axisX.modelMatrix, rotationX, axisX.modelMatrix)
+    const my = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90))
+    const rotationY = Cesium.Matrix4.fromRotationTranslation(my)
+    Cesium.Matrix4.multiply(axisY.modelMatrix, rotationY, axisY.modelMatrix)
+  }
+  show(isshow: boolean) {
+    this._primitives.show = isshow
+  }
+  destroy() {
+    this._primitives.destroy()
+    this.handler?.destroy()
+  }
+  translateSelf(matrix: Cesium.Matrix4) {
+    const length = this._primitives.length
+    for (let i = 0; i < length; ++i) {
+      const p = this._primitives.get(i)
+      Cesium.Matrix4.multiply(matrix, p.modelMatrix, p.modelMatrix)
+    }
+  }
+  initPoly() {
+    //创建圆弧primitive
+    let matrix = Cesium.Transforms.eastNorthUpToFixedFrame(this.center)
+    let radius = this.radius
+    function createAxisSphere(matrix: Cesium.Matrix4, id: string, color = Cesium.Color.RED) {
+      const position = []
+      for (let i = 0; i <= 360; i += 3) {
+        const sin = Math.sin(Cesium.Math.toRadians(i))
+        const cos = Math.cos(Cesium.Math.toRadians(i))
+        const x = radius * cos
+        const y = radius * sin
+        position.push(new Cesium.Cartesian3(x, y, 0))
+      }
+
+      const geometry = new Cesium.PolylineGeometry({
+        positions: position,
+        width: 10
+      })
+      const instnce = new Cesium.GeometryInstance({
+        geometry: geometry,
+        id,
+        attributes: {
+          color: Cesium.ColorGeometryInstanceAttribute.fromColor(color)
+        }
+      })
+      return new Cesium.Primitive({
+        geometryInstances: instnce,
+        appearance: new Cesium.PolylineColorAppearance({
+          translucent: false
+        }),
+        modelMatrix: matrix
+      })
+    }
+    let axisSphereX = createAxisSphere(matrix, 'rotatex', Cesium.Color.RED)
+    let axisSphereY = createAxisSphere(matrix, 'rotatey', Cesium.Color.GREEN)
+    let axisSphereZ = createAxisSphere(matrix, 'rotatez', Cesium.Color.BLUE)
+    this._primitives.add(axisSphereX)
+    this._primitives.add(axisSphereY)
+    this._primitives.add(axisSphereZ)
+    const my = Cesium.Matrix3.fromRotationX(Cesium.Math.toRadians(90))
+    const rotationY = Cesium.Matrix4.fromRotationTranslation(my)
+    Cesium.Matrix4.multiply(axisSphereY.modelMatrix, rotationY, axisSphereY.modelMatrix)
+    const mx = Cesium.Matrix3.fromRotationY(Cesium.Math.toRadians(90))
+    const rotationX = Cesium.Matrix4.fromRotationTranslation(mx)
+    Cesium.Matrix4.multiply(axisSphereX.modelMatrix, rotationX, axisSphereX.modelMatrix)
+    // this.viewer.scene.primitives.add(axisSphereX)
+    // this.viewer.scene.primitives.add(axisSphereY)
+    // this.viewer.scene.primitives.add(axisSphereZ)
+  }
+  initArrowPolyline(id: string, color: Cesium.Color) {
+    //这里用的是圆锥几何对象，当topRadius和bottomRadius相同时，它就是一个圆柱
+    const line = Cesium.CylinderGeometry.createGeometry(
+      new Cesium.CylinderGeometry({
+        length: this._length,
+        topRadius: this._width,
+        bottomRadius: this._width
+      })
+    )
+    const arrow = Cesium.CylinderGeometry.createGeometry(
+      new Cesium.CylinderGeometry({
+        length: this._headLength,
+        topRadius: 0,
+        bottomRadius: this._headWidth
+      })
+    )
+    let offset = (this._length + this._headLength) / 2
+    if (this._inverse) {
+      offset = -offset
+    }
+
+    this.translate(arrow!, [0, 0, offset])
+
+    return new Cesium.Primitive({
+      modelMatrix: Cesium.Transforms.eastNorthUpToFixedFrame(this.center),
+      geometryInstances: [
+        new Cesium.GeometryInstance({
+          id: id + '-line',
+          geometry: line!
+        }),
+        new Cesium.GeometryInstance({
+          id: id + '-arrow',
+          geometry: arrow!
+        })
+      ],
+      appearance: new Cesium.MaterialAppearance({
+        material: Cesium.Material.fromType('Color', { color })
+      }),
+      asynchronous: false
+    })
+  }
+  translate(geometry: Cesium.Geometry, offset: Array<number>) {
+    const scratchOffset = new Cesium.Cartesian3()
+    if (Array.isArray(offset)) {
+      scratchOffset.x = offset[0]
+      scratchOffset.y = offset[1]
+      scratchOffset.z = offset[2]
+    } else {
+      Cesium.Cartesian3.clone(offset, scratchOffset)
+    }
+
+    for (let i = 0; i < geometry.attributes.position.values.length; i += 3) {
+      geometry.attributes.position.values[i] += scratchOffset.x
+      geometry.attributes.position.values[i + 1] += scratchOffset.y
+      geometry.attributes.position.values[i + 2] += scratchOffset.z
+    }
+  }
+}
+
+export { RainEffect, SnowEffect, initCesium, load3DTiles, loadGltf, transformControl }

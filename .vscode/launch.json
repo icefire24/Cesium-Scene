@@ -7,7 +7,7 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "three-react",
+      "name": "cesiumscene",
       "url": "http://localhost:3000",
       "runtimeArgs": ["--auto-open-devtools-for-tabs"],
       "webRoot": "${workspaceFolder}"

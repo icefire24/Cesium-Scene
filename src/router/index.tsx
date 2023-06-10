@@ -5,11 +5,7 @@ import CesiumMap from '@/views/cesium/index'
 const routes: RouteObject[] = [
     {
         path: '/',
-        element: <TheHome />
-    },
-    {
-        path: '/cesium',
-        element: <CesiumMap />
-    }, 
+        element: <CeisumMap />
+    }
 ]
 export default createBrowserRouter(routes)
